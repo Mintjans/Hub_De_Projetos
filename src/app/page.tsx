@@ -23,7 +23,7 @@ interface PropsNavProjeto {
 }
 
 interface PropsSetNavegarPagina {
-  page: string|boolean
+  page: Page
   titulo: string
 }
 
@@ -41,14 +41,26 @@ type Projeto = {
   titulo: string
   linkGit: string|boolean
   linkYT: string|boolean
-  caminhoPage: string|boolean
+  caminhoPage: Page
+  //caminhoPage: string|boolean
+}
+
+type Page = {
+  passo: string
+  tipo: TipoPage
 }
 
 enum RedesPossiveis {
-  Tiktok,
-  Youtube,
-  Instagram,
-  Github
+  Tiktok, //=0
+  Youtube, //=1
+  Instagram, //=2
+  Github //=3
+}
+//Talvez eu mude no futuro
+enum TipoPage {
+  False,
+  Link,
+  Page
 }
 
 function getImg(tipo : number): JSX.Element{
@@ -136,19 +148,33 @@ function ContainerProjeto({dados, descricao}: PropsContainerProjeto) {
 }
 
 function SetNavegarPagina({page, titulo}: PropsSetNavegarPagina): JSX.Element{
-  if (!page) {
+  if (page.tipo === TipoPage.False) {
     return(
       <div className="flex-none content-center p-1">
           <p className="font-medium text-left text-sm text-slate-950 my-auto">{titulo}</p>
       </div>
     )
   }
-  //preciso colocar um onclick no futuro para redirecionar pro "site" do projeto(na verdade é só uma nova pagina)
-  return(
-    <div className="flex-none content-center transition-colors duration-300 hover:bg-orange-200 p-1">
+
+  if (page.tipo === TipoPage.Link) {
+    return(
+      <div className="flex-none content-center transition-colors duration-300 hover:bg-orange-200 p-1">
+        <a href={page.passo as string} target="_blank" rel="noopener noreferrer">
+          <p className="font-medium text-left text-sm text-slate-950 my-auto">{titulo}</p>
+        </a>
+      </div>
+    )
+  }
+
+  if (page.tipo === TipoPage.Page) {
+    return(
+      <div className="flex-none content-center transition-colors duration-300 hover:bg-orange-200 p-1">
         <p className="font-medium text-left text-sm text-slate-950 my-auto">{titulo}</p>
-    </div>
-  )
+      </div>
+    )
+  }
+
+  return <div></div>
 }
 
 function LinksDoProjeto({link, tipo}: PropsLinksDoProjeto): JSX.Element|undefined{
@@ -261,11 +287,21 @@ export default function Home() {
       </div>
       <ContainerProjeto
       dados = {{titulo: "Hub de Projetos(esse site)",
-        linkGit: "https://github.com/Mintjans/Mintjans.github.io",
+        linkGit: "https://github.com/Mintjans/Hub_De_Projetos",
         linkYT: false,
-        caminhoPage: false
+        caminhoPage: {passo: "",
+                      tipo: TipoPage.False}
       }}
       descricao="Um site para organizar, expor e poder navegar pelos meus projetos. Feito com React, Tailwind e Next."
+      />
+      <ContainerProjeto
+      dados = {{titulo: "O que estudar para o Enem",
+        linkGit: "https://github.com/Mintjans/Mintjans.github.io",
+        linkYT: false,
+        caminhoPage: {passo: "https://mintjans.github.io/",
+                      tipo: TipoPage.Link}
+      }}
+      descricao="O que estudar para o Enem é uma representação gráfica dos conteúdos que mais caem no ENEM utilizando D3.JS."
       />
     </div>
   );
