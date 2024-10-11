@@ -288,7 +288,7 @@ export default function Home() {
       <ContainerProjeto
       dados = {{titulo: "Hub de Projetos(esse site)",
         linkGit: "https://github.com/Mintjans/Hub_De_Projetos",
-        linkYT: false,
+        linkYT: "https://www.youtube.com/watch?v=kdCfCeRLyrY",
         caminhoPage: {passo: "",
                       tipo: TipoPage.False}
       }}
